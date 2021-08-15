@@ -1,30 +1,36 @@
-%w[ http json ].each { |gem| require gem }
+%w[http json].each { |gem| require gem }
 
-$url = 'https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions'
+url = 'https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions'
+url_ru_param = '?locale=ru&country=RU&allowCountries=RU'
 
-def request_get()
-  request = HTTP.get($url)
+def request_get(url)
+  request = HTTP.get(url)
   if request.code != 200
-    puts "URL: " + $url
-    puts "Request respone is not 200 code."
+    puts 'URL: ' + url
+    puts 'Request respone is not 200 code.'
     return(nil)
   end
-  return request
+  request
 end
 
 def parse(response)
-  if response.nil? then 
-    return nil
-  end
+  return nil if response.nil?
+
   data = JSON.parse(response)
-  data['data']['Catalog']['searchStore']['elements'].each do |key, obj|
-    puts key["title"] unless key['promotions'].nil?
+  data['data']['Catalog']['searchStore']['elements'].each do |key, _obj|
+    next if key['promotions'].nil?
+
+    project_name = key['title']
+    effective_date = key['effectiveDate']
+
+    puts project_name
+    puts effective_date
   end
 end
 
-def update_info()
-  puts "Error." if not parse(request_get())
+def update_info(url)
+  puts 'Error.' unless parse(request_get(url))
 end
 
-update_info()
+update_info(url + url_ru_param)
 exit(0)

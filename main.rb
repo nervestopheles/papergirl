@@ -1,4 +1,4 @@
-%w[http json].each { |gem| require gem }
+%w[http json date].each { |gem| require gem }
 
 url = 'https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions'
 url_ru_param = '?locale=ru&country=RU&allowCountries=RU'
@@ -21,10 +21,14 @@ def parse(response)
     next if key['promotions'].nil?
 
     project_name = key['title']
-    effective_date = key['effectiveDate']
+    effective_date = DateTime.parse(key['effectiveDate'])
 
     puts project_name
-    puts effective_date
+    puts format('Дата выхода: %.2s.%.2s.%.4s',
+                effective_date.day,
+                effective_date.month,
+                effective_date.year)
+    print "\n"
   end
 end
 

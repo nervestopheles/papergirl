@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 %w[
   http
   json
@@ -12,10 +14,12 @@
 url = 'https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions'
 url_ru_param = '?locale=ru&country=RU&allowCountries=RU'
 
-def update_info(url)
-  puts 'Error.' unless parse(request(url))
+info = parse(request(url + url_ru_param))
+if info.nil?
+  puts 'Error.'
+  exit(1)
 end
 
-update_info(url + url_ru_param)
+puts JSON.pretty_generate(info)
 
 exit(0)

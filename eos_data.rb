@@ -11,12 +11,14 @@ end
 def parse(response)
   return nil if response.nil?
 
+  obj = []
   data = JSON.parse(response)
   data['data']['Catalog']['searchStore']['elements'].each do |key, _obj|
     next if key['promotions'].nil?
 
-    puts JSON.pretty_generate(serialization(key))
+    obj.push(serialization(key))
   end
+  return obj
 end
 
 def serialization(data)

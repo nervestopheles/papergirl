@@ -1,19 +1,16 @@
+%w[
+  http
+  json
+  date
+].each { |gem| require gem }
+
 # ...
 class FreeGamesData
+  attr_reader :data,
+              :raw
+
   def initialize(url)
     @data = parse(request(url))
-  end
-
-  def get
-    if @data.nil?
-      puts 'Error. Returns null.'
-      return nil
-    end
-    return @data
-  end
-
-  def raw
-    return @raw
   end
 
   def request(url)
@@ -43,35 +40,33 @@ class FreeGamesData
     obj = {}
     obj['title'] = data['title']
     obj['effectiveDate'] = data['effectiveDate']
-    obj['promo'] = promotions(data)
+    obj['promotions'] = promotions(data['promotions'])
     return obj
   end
 
-  def promotions(input)
-    startd = 'startDate', endd = 'endDate'
+  def offers(input, offer)
+    start_date = 'startDate'
+    end_date = 'endDate'
+    output = []
 
-    input_promotions  = input['promotions']
-    output_promotions = {}
-
-    current = 'promotionalOffers'
-    output_current_promo = output_promotions[current] = []
-    input_promotions[current].each do |external_key, _external_obj|
+    input[offer].each do |external_key, _external_obj|
       external_key['promotionalOffers'].each do |internal_key, _internal_obj|
-        internal_promotions = output_current_promo[-1] if output_current_promo.push({})
-        internal_promotions[startd] = internal_key[startd]
-        internal_promotions[endd] = internal_key[endd]
+        internal_promo = output[-1] if output.push({})
+        internal_promo[start_date] = internal_key[start_date]
+        internal_promo[end_date] = internal_key[end_date]
       end
     end
-
-    upcoming = 'upcomingPromotionalOffers'
-    output_upcoming_promo = output_promotions[upcoming] = []
-    input_promotions[upcoming].each do |external_key, _external_obj|
-      external_key['promotionalOffers'].each do |internal_key, _internal_obj|
-        internal_promotions = output_upcoming_promo[-1] if output_upcoming_promo.push({})
-        internal_promotions[startd] = internal_key[startd]
-        internal_promotions[endd] = internal_key[endd]
-      end
-    end
-    return output_promotions
+    return output
   end
+
+  def promotions(input)
+    now = 'promotionalOffers'
+    upcoming = 'upcomingPromotionalOffers'
+
+    output = {}
+    output[now] = offers(input, now)
+    output[upcoming] = offers(input, upcoming)
+    return output
+  end
+
 end

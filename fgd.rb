@@ -1,39 +1,39 @@
 %w[
   http
   json
-  date
 ].each { |gem| require gem }
 
 # ...
 class FreeGamesData
   attr_reader :data,
-              :raw
+              :raw_data,
+              :response
 
   def initialize(url)
     @data = parse(request(url))
   end
 
+  private
+
   def request(url)
-    response = HTTP.get(url)
-    if response.code != 200
+    @response = HTTP.get(url)
+    if @response.code != 200
       puts 'URL: ' + url
       puts 'Request respone is not 200 code.'
       return nil
     end
-    return response
+    return @response
   end
 
   def parse(response)
     return nil if response.nil?
 
-    obj = []
-    @raw = JSON.parse(response)
-    @raw['data']['Catalog']['searchStore']['elements'].each do |key, _obj|
-      next if key['promotions'].nil?
-
-      obj.push(serialization(key))
+    processed_data = []
+    @raw_data = JSON.parse(response)
+    @raw_data['data']['Catalog']['searchStore']['elements'].each do |key, _obj|
+      processed_data.push(serialization(key)) unless key['promotions'].nil?
     end
-    return obj
+    return processed_data
   end
 
   def serialization(data)

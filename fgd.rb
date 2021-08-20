@@ -36,36 +36,38 @@ class FreeGamesData
     return processed_data
   end
 
-  def serialization(data)
-    obj = {}
-    obj['title'] = data['title']
-    obj['effectiveDate'] = data['effectiveDate']
-    obj['promotions'] = promotions(data['promotions'])
-    return obj
+  def serialization(input)
+    output = {}
+    output['title'] = input['title']
+    output['effectiveDate'] = input['effectiveDate']
+    output['price'] = price(input['price'])
+    output['promotions'] = promotions(input['promotions'])
+    return output
   end
 
-  def offers(input, offer)
-    start_date = 'startDate'
-    end_date = 'endDate'
-    output = []
-
-    input[offer].each do |external_key, _external_obj|
-      external_key['promotionalOffers'].each do |internal_key, _internal_obj|
-        internal_promo = output[-1] if output.push({})
-        internal_promo[start_date] = internal_key[start_date]
-        internal_promo[end_date] = internal_key[end_date]
-      end
-    end
+  def price(input)
+    output = {}
+    output['originalPrice'] = input['totalPrice']['fmtPrice']['originalPrice']
+    output['discountPrice'] = input['totalPrice']['fmtPrice']['discountPrice']
     return output
   end
 
   def promotions(input)
-    now = 'promotionalOffers'
-    upcoming = 'upcomingPromotionalOffers'
-
     output = {}
-    output[now] = offers(input, now)
-    output[upcoming] = offers(input, upcoming)
+    output['promotionalOffers'] = offers(input, 'promotionalOffers')
+    output['upcomingPromotionalOffers'] = offers(input, 'upcomingPromotionalOffers')
+    return output
+  end
+
+  def offers(input, offer)
+    output = []
+    input[offer].each do |external_key, _external_obj|
+      external_key['promotionalOffers'].each do |internal_key, _internal_obj|
+        internal_promo = output[-1] if output.push({})
+        internal_promo['startDate'] = internal_key['startDate']
+        internal_promo['endDate'] = internal_key['endDate']
+      end
+    end
     return output
   end
 

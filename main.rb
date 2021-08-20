@@ -9,5 +9,6 @@ url_ru_param = '?locale=ru&country=RU&allowCountries=RU'
 
 ru_info = FreeGamesData.new(url + url_ru_param)
 puts JSON.pretty_generate(ru_info.data)
+# puts JSON.pretty_generate(ru_info.raw_data)
 
 exit(0)

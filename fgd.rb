@@ -7,10 +7,16 @@
 class FreeGamesData
   attr_reader :data,
               :raw_data,
-              :response
+              :response,
+              :url
 
   def initialize(url)
-    @data = parse(request(url))
+    @url = url
+    @data = parse(request(@url))
+  end
+
+  def update
+    @data = parse(request(@url))
   end
 
   private

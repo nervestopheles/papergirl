@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 
-%w[
-  fgd
-].each { |file| require_relative file }
+require 'dotenv'
+require_relative 'fgd'
 
 url = 'https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions'
 url_ru_param = '?locale=ru&country=RU&allowCountries=RU'
@@ -14,7 +13,7 @@ ru_info = FreeGamesData.new(url + url_ru_param)
 
 require 'discordrb'
 
-bot = Discordrb::Bot.new token: 'ODc4MTk3MTYxMDA1ODA5NjY0.YR9q1w.ThtDadXA9UFKNAK6xear6xRw1jY'
+bot = Discordrb::Bot.new token: ENV['TOKEN'], prefix: '!'
 
 mes = Discordrb::Webhooks::Embed.new
 mes.title = 'Title!'

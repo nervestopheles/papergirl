@@ -1,0 +1,19 @@
+Style/RedundantReturn:
+  Enabled: false
+Style/StringConcatenation:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 26
+Metrics/AbcSize:
+  Enabled: false
+
+Layout/EmptyLinesAroundMethodBody:
+  Enabled: false
+Layout/EmptyLinesAroundClassBody: 
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false

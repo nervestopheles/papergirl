@@ -40,9 +40,16 @@ class FreeGamesData
     output = {}
     output['title'] = input['title']
     output['effectiveDate'] = input['effectiveDate']
+    output['logo'] = logo(input['keyImages'])
     output['price'] = price(input['price'])
     output['promotions'] = promotions(input['promotions'])
     return output
+  end
+
+  def logo(input)
+    input.each do |key, _obj|
+      return key['url'] if key['type'] == 'OfferImageWide'
+    end
   end
 
   def price(input)

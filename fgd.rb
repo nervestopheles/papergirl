@@ -40,6 +40,7 @@ class FreeGamesData
     output = {}
     output['title'] = input['title']
     output['effectiveDate'] = input['effectiveDate']
+    output['url'] = 'https://www.epicgames.com/store/ru/p/' + input['urlSlug']
     output['logo'] = logo(input['keyImages'])
     output['price'] = price(input['price'])
     output['promotions'] = promotions(input['promotions'])

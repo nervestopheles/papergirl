@@ -16,14 +16,17 @@ require 'discordrb'
 
 bot = Discordrb::Bot.new token: 'ODc4MTk3MTYxMDA1ODA5NjY0.YR9q1w.ThtDadXA9UFKNAK6xear6xRw1jY'
 
+mes = Discordrb::Webhooks::Embed.new
+mes.title = 'Title!'
+
 # У обычных серверов discord ограничение 2000 символов на сообщение.
 # У серверов с nitro ограничение 4000 символов на сообщение.
 bot.message(with_text: '!raw') do |event|
-  event.respond 'Raw response: ' + format('%.1000s', ru_info.raw_data.to_s)
+  event.respond 'Raw response: ' + format('%.1800s', ru_info.raw_data.to_s)
 end
 
 bot.message(with_text: '!info') do |event|
-  event.respond JSON.pretty_generate(ru_info.data)
+  event.channel.send_embed('qwerty', mes)
   event.respond 'Response length: ' + ru_info.data.to_s.length.to_s
 end
 

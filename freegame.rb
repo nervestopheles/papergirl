@@ -3,6 +3,8 @@
   json
 ].each { |gem| require gem }
 
+require_relative 'gamepage'
+
 # ...
 class FreeGamesData
   attr_reader :data,
@@ -44,11 +46,11 @@ class FreeGamesData
 
   def serialization(input)
     output = {}
-    output['url'] = 'https://www.epicgames.com/store/ru/p/' + input['urlSlug']
+    output['url'] = 'https://www.epicgames.com/store/ru/p/' + input['productSlug'] + '?lang=ru'
+    output['logo'] = logo(input['keyImages'])
     output['title'] = input['title']
     output['effectiveDate'] = input['effectiveDate']
-    output['description'] = input['description']
-    output['logo'] = logo(input['keyImages'])
+    output['description'] = GamePage.new(output['url']).description
     output['price'] = price(input['price'])
     output['promotions'] = promotions(input['promotions'])
     return output
@@ -62,8 +64,8 @@ class FreeGamesData
 
   def price(input)
     output = {}
-    output['originalPrice'] = input['totalPrice']['fmtPrice']['originalPrice']
-    output['discountPrice'] = input['totalPrice']['fmtPrice']['discountPrice']
+    output['originalPrice'] = input['totalPrice']['originalPrice']
+    output['discountPrice'] = input['totalPrice']['discountPrice']
     return output
   end
 

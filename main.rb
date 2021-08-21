@@ -7,7 +7,7 @@
 ].each { |gem| require gem }
 
 %w[
-  fgd
+  freegame
   newspaper
 ].each { |gem| require_relative gem }
 
@@ -52,6 +52,8 @@ end
 newsgirl.command(:free) do |event|
   event.respond 'Бесплатные игры на этой неделе:'
   informations.data.each do |info, _obj|
+    next if info['price']['discountPrice'] != 0
+
     newspaper = Newspaper.new(info)
     event.channel.send_embed('', newspaper.newspaper)
   end

@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 %w[
+  json
   dotenv
   discordrb
 ].each { |gem| require gem }
@@ -14,6 +15,8 @@ Dotenv.load
 
 url = 'https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions'
 url_ru_param = '?locale=ru&country=RU&allowCountries=RU'
+
+raw_output_file = 'raw_output.json'
 
 informations = FreeGamesData.new(url + url_ru_param)
 newsgirl = Discordrb::Commands::CommandBot.new token: ENV['TOKEN'], prefix: '!'
@@ -30,6 +33,9 @@ end
 newsgirl.command(:raw) do |event|
   event.respond 'Raw response:'
   event.respond format('%.1800s', informations.raw_data.to_s + '...')
+  File.open(raw_output_file, 'w') do |file|
+    file.write(JSON.pretty_generate(informations.raw_data))
+  end
   return nil
 end
 

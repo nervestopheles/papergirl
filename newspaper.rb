@@ -14,6 +14,7 @@ class Newspaper
     newspaper = Discordrb::Webhooks::Embed.new
     newspaper.url = news['url']
     newspaper.title = news['title']
+    newspaper.description = news['description']
     newspaper.image = logo(news['logo'])
     return newspaper
   end

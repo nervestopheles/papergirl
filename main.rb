@@ -30,12 +30,17 @@ end
 newsgirl.command(:raw) do |event|
   event.respond 'Raw response:'
   event.respond format('%.1800s', informations.raw_data.to_s + '...')
+  return nil
 end
 
 newsgirl.command(:update) do |event|
   event.respond 'loading...'
-  event.respond JSON.pretty_generate(informations.update)
-  event.respond 'Response length: ' + informations.data.to_s.length.to_s
+  informations.update
+  informations.data.each do |key, _obj|
+    event.respond JSON.pretty_generate(key)
+    event.respond 'Response length: ' + key.to_s.length.to_s
+  end
+  return nil
 end
 
 newsgirl.command(:free) do |event|

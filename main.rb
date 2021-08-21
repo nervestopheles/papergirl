@@ -30,7 +30,8 @@ end
 
 # У обычных серверов discord ограничение 2000 символов на сообщение.
 # У серверов с nitro ограничение 4000 символов на сообщение.
-newsgirl.command(:raw) do |event|
+newsgirl.command(:raw,
+                 description: 'Записать сырой ответ в лог.') do |event|
   event.respond 'Raw response:'
   event.respond format('%.1800s', informations.raw_data.to_s + '...')
   File.open(raw_output_file, 'w') do |file|
@@ -39,7 +40,8 @@ newsgirl.command(:raw) do |event|
   return nil
 end
 
-newsgirl.command(:update) do |event|
+newsgirl.command(:update,
+                 description: 'Принудительно обновить информацию о бесплатных играх.') do |event|
   event.respond 'loading...'
   informations.update
   informations.data.each do |key, _obj|
@@ -49,7 +51,8 @@ newsgirl.command(:update) do |event|
   return nil
 end
 
-newsgirl.command(:free) do |event|
+newsgirl.command(:free,
+                 description: 'Список бесплатных игр на этой неделе.') do |event|
   event.respond 'Бесплатные игры на этой неделе:'
   informations.data.each do |info, _obj|
     next if info['price']['discountPrice'] != 0

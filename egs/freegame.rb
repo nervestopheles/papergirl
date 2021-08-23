@@ -26,7 +26,7 @@ class FreeGamesData
   end
 
   def parse(response)
-    return response if response.code != 200
+    return nil if response.code != 200
 
     processed_data = []
     @raw_data = JSON.parse(response)
@@ -40,13 +40,13 @@ class FreeGamesData
     url = 'https://www.epicgames.com/store/ru/p/' +
           input['productSlug'] + '?lang=ru'
     return {
-      url: url,
-      logo: logo(input['keyImages']),
-      title: input['title'],
-      effectiveDate: input['effectiveDate'],
-      description: GamePage.new(url).description,
-      price: price(input['price']),
-      promotions: promotions(input['promotions'])
+      'url' => url,
+      'logo' => logo(input['keyImages']),
+      'title' => input['title'],
+      'effectiveDate' => input['effectiveDate'],
+      'description' => GamePage.new(url).description,
+      'price' => price(input['price']),
+      'promotions' => promotions(input['promotions'])
     }
   end
 
@@ -58,15 +58,15 @@ class FreeGamesData
 
   def price(input)
     return {
-      originalPrice: input['totalPrice']['originalPrice'],
-      discountPrice: input['totalPrice']['discountPrice']
+      'originalPrice' => input['totalPrice']['originalPrice'],
+      'discountPrice' => input['totalPrice']['discountPrice']
     }
   end
 
   def promotions(input)
     return {
-      promotionalOffers: offers(input, 'promotionalOffers'),
-      upcomingPromotionalOffers: offers(input, 'upcomingPromotionalOffers')
+      'promotionalOffers' => offers(input, 'promotionalOffers'),
+      'upcomingPromotionalOffers' => offers(input, 'upcomingPromotionalOffers')
     }
   end
 
@@ -76,8 +76,8 @@ class FreeGamesData
       key['promotionalOffers'].each do |promo, _obj|
         output.push(
           {
-            startDate: promo['startDate'],
-            endDate: promo['endDate']
+            'startDate' => promo['startDate'],
+            'endDate' => promo['endDate']
           }
         )
       end

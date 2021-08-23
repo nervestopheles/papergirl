@@ -11,14 +11,14 @@ class Newspaper
   end
 
   def parse(news)
-    newspaper = Discordrb::Webhooks::Embed.new(
+    var = Discordrb::Webhooks::Embed.new(
       url: news['url'],
       title: news['title'],
       description: news['description'],
       image: Discordrb::Webhooks::EmbedImage.new(url: news['logo']),
       footer: Discordrb::Webhooks::EmbedFooter.new(text: 'Epic Games Store')
     )
-    return newspaper
+    return var
   end
 
 end

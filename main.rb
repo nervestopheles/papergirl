@@ -51,9 +51,10 @@ newsgirl.command(
 ) do |event|
   event.respond 'loading...'
   informations.update
-  informations.data.each do |key, _obj|
-    # event.respond JSON.pretty_generate(key)
-    event.respond 'Response length: ' + key.to_s.length.to_s
+  if informations.response.code == 200
+    event.respond 'ok!'
+  else
+    event.respond 'server response code is not 200.'
   end
   return nil
 end
@@ -63,6 +64,9 @@ newsgirl.command(
   description: 'Список бесплатных игр на этой неделе.'
 ) do |event|
   event.respond 'Бесплатные игры на этой неделе:'
+  File.open('data.json', 'w') do |file|
+    file.write(JSON.pretty_generate(informations.data))
+  end
   informations.data.each do |info, _obj|
     next if info['price']['discountPrice'] != 0
 
@@ -72,4 +76,4 @@ newsgirl.command(
   return nil
 end
 
-# newsgirl.run
+newsgirl.run

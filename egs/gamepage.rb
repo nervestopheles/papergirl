@@ -12,8 +12,10 @@ class GamePage
   end
 
   def description_parse(url)
-    doc = Nokogiri::HTML(URI.open(url))
-    return doc.xpath("//div[@class='css-pfxkyb']").text
+    page = URI.open(url)
+    description = Nokogiri::HTML(page).xpath("//div[@class='css-pfxkyb']").text
+    File.delete(page)
+    return description
   end
 
 end

@@ -59,26 +59,24 @@ class FreeGamesData
 
       'promotions' => lambda do
         return {
-          'promotionalOffers' => offers(input['promotions'], 'promotionalOffers'),
-          'upcomingPromotionalOffers' => offers(input['promotions'], 'upcomingPromotionalOffers')
+          'promotionalOffers' =>
+            unless input['promotions']['promotionalOffers'].empty?
+              offers(input['promotions']['promotionalOffers'])
+            end,
+          'upcomingPromotionalOffers' =>
+            unless input['promotions']['upcomingPromotionalOffers'].empty?
+              offers(input['promotions']['upcomingPromotionalOffers'])
+            end
         }
       end.call
     }
   end
 
-  def offers(input, offer)
-    output = []
-    input[offer].each do |key, _obj|
-      key['promotionalOffers'].each do |promo, _obj|
-        output.push(
-          {
-            'startDate' => promo['startDate'],
-            'endDate' => promo['endDate']
-          }
-        )
-      end
-    end
-    return output
+  def offers(offer)
+    return {
+      'startDate' => offer[0]['promotionalOffers'][0]['startDate'],
+      'endDate' => offer[0]['promotionalOffers'][0]['endDate']
+    }
   end
 
 end

@@ -41,32 +41,28 @@ class FreeGamesData
           input['productSlug'] + '?lang=ru'
     return {
       'url' => url,
-      'logo' => logo(input['keyImages']),
       'title' => input['title'],
-      'effectiveDate' => input['effectiveDate'],
       'description' => GamePage.new(url).description,
-      'price' => price(input['price']),
-      'promotions' => promotions(input['promotions'])
-    }
-  end
 
-  def logo(input)
-    input.each do |key, _obj|
-      return key['url'] if key['type'] == 'OfferImageWide'
-    end
-  end
+      'logo' => lambda do
+        input['keyImages'].each do |key, _obj|
+          return key['url'] if key['type'] == 'OfferImageWide'
+        end
+      end.call,
 
-  def price(input)
-    return {
-      'originalPrice' => input['totalPrice']['originalPrice'],
-      'discountPrice' => input['totalPrice']['discountPrice']
-    }
-  end
+      'price' => lambda do
+        return {
+          'originalPrice' => input['price']['totalPrice']['originalPrice'],
+          'discountPrice' => input['price']['totalPrice']['discountPrice']
+        }
+      end.call,
 
-  def promotions(input)
-    return {
-      'promotionalOffers' => offers(input, 'promotionalOffers'),
-      'upcomingPromotionalOffers' => offers(input, 'upcomingPromotionalOffers')
+      'promotions' => lambda do
+        return {
+          'promotionalOffers' => offers(input['promotions'], 'promotionalOffers'),
+          'upcomingPromotionalOffers' => offers(input['promotions'], 'upcomingPromotionalOffers')
+        }
+      end.call
     }
   end
 

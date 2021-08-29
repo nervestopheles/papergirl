@@ -23,7 +23,7 @@ class Newspaper
     var.add_field(
       name: 'Дата начала акции:',
       value: lambda do
-               ed = DateTime.parse(news['effectiveDate'])
+               ed = DateTime.parse(news['promotions']['promotionalOffers'][0]['startDate'])
                return format('%s.%s.%s', ed.day.to_s, ed.month.to_s, ed.year.to_s)
              end.call,
       inline: true

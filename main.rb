@@ -49,7 +49,7 @@ newsgirl.command(
   break unless event.user.id.to_s == ENV['ONIICHAN']
 
   newsgirl.send_message(event.channel.id, 'sayonara.')
-  exit 0
+  newsgirl.stop
 end
 
 # У обычных серверов discord ограничение 2000 символов на сообщение.
@@ -110,14 +110,33 @@ newsgirl.command(
   end
 
   subscribers_list.append event.channel.id.to_s
-
-  subscribers_file = File.open(subs_file_name, 'w')
-  subscribers_file.write(subscribers_list.join("\n"))
-  subscribers_file.close
+  update_subs_file(subs_file_name, subscribers_list)
 
   event.respond 'Хорошо, теперь я буду приносить новости и сюда)'
+  puts format('Канал %s подписался на рассылку.', event.channel.name)
   mysubs(newsgirl, event, subscribers_list)
   return nil
 end
 
+newsgirl.command(
+  :unscribe,
+  description: 'Отписаться от новостей.'
+) do |event|
+  unless subscribers_list.include? event.channel.id.to_s
+    event.respond 'Вас и так нет в моем списке рассылки('
+    return nil
+  end
+
+  if event.channel.id.to_s == subscribers_list.delete(event.channel.id.to_s)
+    event.respond 'Ладно, теперь я не буду приносить вам новости('
+    puts format('Канал %s отказался от рассылки.', event.channel.name)
+    update_subs_file(subs_file_name, subscribers_list)
+  else
+    puts 'Delete user error.'
+  end
+end
+
 newsgirl.run
+
+puts "\nGoodbye."
+exit 0

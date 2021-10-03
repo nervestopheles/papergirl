@@ -21,7 +21,8 @@ class GamePage
     about = about_section[0].text
     genre = about_section[1].text.split(/(Жанры)|(Особенности)/)[2].split(/(?=[А-Я])/).join(', ')
 
-    description = about + "\n\nЖанры: " + genre
+    description = [].append(about, genre)
+
     File.delete(page)
 
     return description

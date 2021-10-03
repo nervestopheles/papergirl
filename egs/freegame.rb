@@ -39,10 +39,12 @@ class FreeGamesData
   def serialization(input)
     url = 'https://www.epicgames.com/store/ru/p/' +
           input['productSlug'] + '?lang=ru'
+    description = GamePage.new(url).description
     return {
       'url' => url,
       'title' => input['title'],
-      'description' => GamePage.new(url).description,
+      'description' => description[0],
+      'genre' => description[1],
 
       'logo' => lambda do
         input['keyImages'].each do |key, _obj|

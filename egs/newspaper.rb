@@ -23,6 +23,10 @@ class Newspaper
       color: 0x808080 # just gray color
     )
     var.add_field(
+      name: 'Жанры:',
+      value: news['genre']
+    )
+    var.add_field(
       name: 'Дата начала акции:', inline: true,
       value: date(DateTime.parse(news['promotions']['promotionalOffers']['startDate']))
     )

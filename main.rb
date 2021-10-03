@@ -21,6 +21,17 @@
 
 Dotenv.load
 
+subs_file_name = ENV['SUBSCRIBERS_LIST'].to_s
+
+if File.exist? subs_file_name
+  subscribers_file = File.open(subs_file_name, 'r')
+  subscribers_list = subscribers_file.read.split(/\n/)
+  subscribers_file.close
+else
+  File.new(subs_file_name, 'w').close
+  subscribers_list = []
+end
+
 url = 'https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions'
 url_ru_param = '?locale=ru&country=RU&allowCountries=RU'
 
@@ -29,9 +40,6 @@ format_output_file = ENV['FORMAT_OUTPUT']
 
 informations = FreeGamesData.new(url + url_ru_param)
 newsgirl = Discordrb::Commands::CommandBot.new token: ENV['TOKEN'], prefix: '!'
-
-subscribers_file = File.open(ENV['SUBSCRIBERS_LIST'])
-subscribers_list = []
 
 newsgirl.command(
   :sayonara,
@@ -96,7 +104,17 @@ newsgirl.command(
   :subscribe,
   description: 'Подписаться на новости.'
 ) do |event|
+  if subscribers_list.include? event.channel.id.to_s
+    event.respond 'Я помню что вы просили приносить сюда новости)'
+    return nil
+  end
+
   subscribers_list.append event.channel.id.to_s
+
+  subscribers_file = File.open(subs_file_name, 'w')
+  subscribers_file.write(subscribers_list.join("\n"))
+  subscribers_file.close
+
   event.respond 'Хорошо, теперь я буду приносить новости и сюда)'
   mysubs(newsgirl, event, subscribers_list)
   return nil

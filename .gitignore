@@ -1,4 +1,7 @@
 .vscode
 
 *.json
+*.csv
+*.txt
+
 .env

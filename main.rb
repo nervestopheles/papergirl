@@ -17,6 +17,7 @@
   egs/debug
   egs/freegame
   egs/newspaper
+  egs/timer
 ].each { |gem| require_relative gem }
 
 Dotenv.load
@@ -93,7 +94,7 @@ newsgirl.command(
   description: 'Список бесплатных игр на этой неделе.'
 ) do |event|
   event.respond 'Бесплатные игры на этой неделе:'
-  newspapers_bundle.bundle.each { |news| event.channel.send_embed('', news.newspaper)}
+  newspapers_bundle.bundle.each { |news| event.channel.send_embed('', news.newspaper) }
   return nil
 end
 
@@ -133,7 +134,10 @@ newsgirl.command(
   end
 end
 
+timer = Timer.new(informations, newspapers_bundle, subscribers_list, newsgirl)
 newsgirl.run
+
+timer.thread.kill
 
 puts "\nGoodbye."
 exit 0

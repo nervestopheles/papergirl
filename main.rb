@@ -39,6 +39,8 @@ raw_output_file = ENV['RAW_OUTPUT']
 format_output_file = ENV['FORMAT_OUTPUT']
 
 informations = FreeGamesData.new(url + url_ru_param)
+newspapers_bundle = NewsPaperBundle.new(informations)
+
 newsgirl = Discordrb::Commands::CommandBot.new token: ENV['TOKEN'], prefix: '!'
 
 newsgirl.command(
@@ -91,12 +93,7 @@ newsgirl.command(
   description: 'Список бесплатных игр на этой неделе.'
 ) do |event|
   event.respond 'Бесплатные игры на этой неделе:'
-  informations.data.each do |info, _obj|
-    next if info['price']['discountPrice'] != 0
-
-    newspaper = Newspaper.new(info)
-    event.channel.send_embed('', newspaper.newspaper)
-  end
+  newspapers_bundle.bundle.each { |news| event.channel.send_embed('', news.newspaper)}
   return nil
 end
 

@@ -42,3 +42,18 @@ class Newspaper
   end
 
 end
+
+# ...
+class NewsPaperBundle
+  attr_reader :bundle
+
+  def initialize(informations)
+    @bundle = []
+    informations.data.each do |info, _obj|
+      next if info['price']['discountPrice'] != 0
+
+      @bundle.append Newspaper.new(info)
+    end
+  end
+
+end

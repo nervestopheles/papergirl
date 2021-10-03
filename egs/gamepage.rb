@@ -17,10 +17,13 @@ class GamePage
     page = URI.open(url)
     html = Nokogiri::HTML(page)
     about_section = html.css('div[data-component=AboutSectionLayout]')
+
     about = about_section[0].text
     genre = about_section[1].text.split(/(Жанры)|(Особенности)/)[2].split(/(?=[А-Я])/).join(', ')
+
     description = about + "\n\nЖанры: " + genre
     File.delete(page)
+
     return description
   end
 

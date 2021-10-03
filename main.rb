@@ -64,6 +64,7 @@ newsgirl.command(
   description: 'Список бесплатных игр на этой неделе.'
 ) do |event|
   event.respond 'Бесплатные игры на этой неделе:'
+  event.respond 'Channel ID: ' + event.channel.id.to_s
   File.open('data.json', 'w') do |file|
     file.write(JSON.pretty_generate(informations.data))
   end
@@ -76,4 +77,5 @@ newsgirl.command(
   return nil
 end
 
+newsgirl.send_message('878204904454361088', 'Hello from Soma')
 newsgirl.run

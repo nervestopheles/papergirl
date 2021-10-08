@@ -19,6 +19,10 @@ class FreeGamesData
     @data = parse(request(@response.uri))
   end
 
+  def set(new_data)
+    @data = new_data
+  end
+
   private
 
   def request(url)
@@ -38,7 +42,7 @@ class FreeGamesData
 
   def serialization(input)
     url = 'https://www.epicgames.com/store/ru/p/' +
-          input['productSlug'] + '?lang=ru'
+      input['productSlug'] + '?lang=ru'
     description = GamePage.new(url).description
     return {
       'url' => url,

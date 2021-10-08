@@ -42,7 +42,7 @@ class FreeGamesData
 
   def serialization(input)
     url = 'https://www.epicgames.com/store/ru/p/' +
-      input['productSlug'] + '?lang=ru'
+          input['urlSlug'] + '?lang=ru'
     description = GamePage.new(url).description
     return {
       'url' => url,

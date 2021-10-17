@@ -35,18 +35,28 @@ class FreeGamesData
     processed_data = []
     @raw_data = JSON.parse(response)
     @raw_data['data']['Catalog']['searchStore']['elements'].each do |key, _obj|
-      processed_data.push(serialization(key)) unless key['promotions'].nil?
+      processed_data.push(serialization(key)) \
+        if !key['promotions'].nil? \
+           && !key['promotions'].empty? \
+           && (!key['promotions']['promotionalOffers'].empty? || !key['promotions']['upcomingPromotionalOffers'].empty?)
     end
     return processed_data
   end
 
   def serialization(input)
-    url = 'https://www.epicgames.com/store/ru/p/' +
-          input['urlSlug'] + '?lang=ru'
-    if (input['description'].nil? or input['description'].length < 20)
-      description = GamePage.new(url).description
-    else
-      description = [].append(input['description'])
+
+    url = if input['productSlug'].nil?
+            'https://www.epicgames.com/store/ru/p/' + input['urlSlug'] + '?lang=ru'
+          else
+            'https://www.epicgames.com/store/ru/p/' + input['productSlug'] + '?lang=ru'
+          end
+
+    description = if input['description'].nil? || (input['description'].length < 20)
+                    GamePage.new(url).description
+                  else
+                    [].append(input['description'])
+                  end
+
     return {
       'url' => url,
       'title' => input['title'],
@@ -67,25 +77,27 @@ class FreeGamesData
       end.call,
 
       'promotions' => lambda do
-        return {
-          'promotionalOffers' =>
-            unless input['promotions']['promotionalOffers'].empty?
-              offers(input['promotions']['promotionalOffers'])
-            end,
-          'upcomingPromotionalOffers' =>
-            unless input['promotions']['upcomingPromotionalOffers'].empty?
-              offers(input['promotions']['upcomingPromotionalOffers'])
-            end
-        }
+        if input['promotions']['promotionalOffers'].empty?
+          offers(input['promotions']['upcomingPromotionalOffers'])
+        else
+          offers(input['promotions']['promotionalOffers'])
+        end
       end.call
     }
   end
 
   def offers(offer)
-    return {
-      'startDate' => offer[0]['promotionalOffers'][0]['startDate'],
-      'endDate' => offer[0]['promotionalOffers'][0]['endDate']
-    }
+    if offer[0]['promotionalOffers'].nil?
+      return {
+        'startDate' => offer[0]['upcomingPromotionalOffers'][0]['startDate'],
+        'endDate' => offer[0]['upcomingPromotionalOffers'][0]['endDate']
+      }
+    else
+      return {
+        'startDate' => offer[0]['promotionalOffers'][0]['startDate'],
+        'endDate' => offer[0]['promotionalOffers'][0]['endDate']
+      }
+    end
   end
 
 end

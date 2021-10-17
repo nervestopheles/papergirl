@@ -22,24 +22,28 @@ class Newspaper
       footer: Discordrb::Webhooks::EmbedFooter.new(text: 'Epic Games Store'),
       color: 0x808080 # just gray color
     )
-    unless (news['genre'].nil?)
+    unless news['genre'].nil?
       var.add_field(
         name: 'Жанры:',
         value: news['genre']
       )
+    end
     var.add_field(
       name: 'Дата начала акции:', inline: true,
-      value: date(DateTime.parse(news['promotions']['promotionalOffers']['startDate']))
+      value: date(DateTime.parse(news['promotions']['startDate']))
     )
     var.add_field(
       name: 'Дата конца акции:', inline: true,
-      value: date(DateTime.parse(news['promotions']['promotionalOffers']['endDate']))
+      value: date(DateTime.parse(news['promotions']['endDate']))
     )
     return var
   end
 
   def date(date)
-    return format('%s.%s.%s', date.day.to_s, date.month.to_s, date.year.to_s)
+    return format('%<day>s.%<month>s.%<year>s',
+                  day: date.day.to_s,
+                  month: date.month.to_s,
+                  year: date.year.to_s)
   end
 
 end
@@ -51,7 +55,7 @@ class NewsPaperBundle
   def initialize(informations)
     @bundle = []
     informations.data.each do |info, _obj|
-      next if info['price']['discountPrice'] != 0
+      # next if info['price']['discountPrice'] != 0
 
       @bundle.append Newspaper.new(info)
     end

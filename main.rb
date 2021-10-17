@@ -90,10 +90,9 @@ newsgirl.command(
 end
 
 newsgirl.command(
-  :free,
-  description: 'Список бесплатных игр на этой неделе.'
+  :promo,
+  description: 'Список действующих и ближайших акций.'
 ) do |event|
-  event.respond 'Бесплатные игры на этой неделе:'
   newspapers_bundle.bundle.each { |news| event.channel.send_embed('', news.newspaper) }
   return nil
 end

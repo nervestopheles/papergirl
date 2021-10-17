@@ -22,10 +22,11 @@ class Newspaper
       footer: Discordrb::Webhooks::EmbedFooter.new(text: 'Epic Games Store'),
       color: 0x808080 # just gray color
     )
-    var.add_field(
-      name: 'Жанры:',
-      value: news['genre']
-    )
+    unless (news['genre'].nil?)
+      var.add_field(
+        name: 'Жанры:',
+        value: news['genre']
+      )
     var.add_field(
       name: 'Дата начала акции:', inline: true,
       value: date(DateTime.parse(news['promotions']['promotionalOffers']['startDate']))

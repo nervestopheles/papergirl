@@ -8,9 +8,9 @@
 #    BIND - host variable, default '0.0.0.0'
 #    MODE - production or debug environment, default 'debug'
 
-#    RAW_OUTPUT - file for write raw logs
-#    FORMAT_OUTPUT - file for write format logs
-#    SUBSCRIBERS_LIST - file for write subscribers ids
+#    RAW_OUTPUT - file for write raw logs, default 'raw_output.json'
+#    FORMAT_OUTPUT - file for write format logs, default 'data.json'
+#    SUBSCRIBERS_LIST - file for write subscribers ids, default 'subscribers_ids.csv'
 
 %w[
   json
@@ -28,7 +28,7 @@ Dotenv.load
   egs/api
 ].each { |gem| require_relative gem }
 
-subs_file_name = ENV['SUBSCRIBERS_LIST'].to_s
+subs_file_name = ENV['SUBSCRIBERS_LIST'] || 'subscribers_ids.csv'
 
 if File.exist? subs_file_name
   subscribers_file = File.open(subs_file_name, 'r')
@@ -42,8 +42,8 @@ end
 url = 'https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions'
 url_ru_param = '?locale=ru&country=RU&allowCountries=RU'
 
-raw_output_file = ENV['RAW_OUTPUT']
-format_output_file = ENV['FORMAT_OUTPUT']
+raw_output_file = ENV['RAW_OUTPUT'] || 'raw_output.json'
+format_output_file = ENV['FORMAT_OUTPUT'] || 'data.json'
 
 informations = FreeGamesData.new(url + url_ru_param)
 newspapers_bundle = NewsPaperBundle.new(informations)

@@ -4,7 +4,17 @@
   thin
 ].each { |gem| require gem }
 
-set :port, 8090
+port = ENV['PORT'] || '8090'
+bind = ENV['BIND'] || '0.0.0.0'
+mode = ENV['MODE'] || 'debug'
+
+set :port, port.to_i
+set :bind, bind.to_s
+if mode == 'production'
+  set :environment, :production
+else
+  set :environment, :debug
+end
 
 # # дефолтный тип для всех контроллеров
 before do

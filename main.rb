@@ -3,6 +3,11 @@
 #  Create .env file with env vars:
 #    TOKEN - unique bot token
 #    ONIICHAN - bot admin id
+
+#    PORT - port for webserver api
+#    BIND - host variable, default '0.0.0.0'
+#    MODE - production or debug environment
+
 #    RAW_OUTPUT - file for write raw logs
 #    FORMAT_OUTPUT - file for write format logs
 #    SUBSCRIBERS_LIST - file for write subscribers ids
@@ -13,6 +18,8 @@
   discordrb
 ].each { |gem| require gem }
 
+Dotenv.load
+
 %w[
   egs/debug
   egs/freegame
@@ -20,8 +27,6 @@
   egs/timer
   egs/api
 ].each { |gem| require_relative gem }
-
-Dotenv.load
 
 subs_file_name = ENV['SUBSCRIBERS_LIST'].to_s
 

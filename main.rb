@@ -4,9 +4,9 @@
 #    TOKEN - unique bot token
 #    ONIICHAN - bot admin id
 
-#    PORT - port for webserver api
+#    PORT - port for webserver api, default '8090'
 #    BIND - host variable, default '0.0.0.0'
-#    MODE - production or debug environment
+#    MODE - production or debug environment, default 'debug'
 
 #    RAW_OUTPUT - file for write raw logs
 #    FORMAT_OUTPUT - file for write format logs

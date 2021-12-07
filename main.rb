@@ -18,6 +18,7 @@
   egs/freegame
   egs/newspaper
   egs/timer
+  egs/api
 ].each { |gem| require_relative gem }
 
 Dotenv.load
@@ -133,10 +134,13 @@ newsgirl.command(
   end
 end
 
+api = Api.new(informations)
 timer = Timer.new(informations, newspapers_bundle, subscribers_list, newsgirl)
+
 newsgirl.run
 
 timer.thread.kill
+api.thread.kill
 
 puts "\nGoodbye."
 exit 0

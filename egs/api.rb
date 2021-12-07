@@ -6,6 +6,7 @@
 
 set :port, 8090
 
+# # дефолтный тип для всех контроллеров
 before do
   content_type :json
 end
@@ -16,7 +17,7 @@ end
 
 get '/api/update' do
   $informations.update
-  return $informations.data.to_json
+  return 204
 end
 
 # ...

@@ -8,6 +8,11 @@ port = ENV['PORT'] || '8090'
 bind = ENV['BIND'] || '0.0.0.0'
 mode = ENV['MODE'] || 'debug'
 
+before do
+  headers 'Access-Control-Allow-Origin' => '*',
+          'Access-Control-Allow-Methods' => %w[OPTIONS GET POST]
+end
+
 set :port, port.to_i
 set :bind, bind.to_s
 if mode == 'production'

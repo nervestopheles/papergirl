@@ -10,7 +10,7 @@ POD=${CONTAINER}-pod
 
 IMG=localhost/${CONTAINER}:latest
 
-podman build --tag ${CONTAINER} .
+buildah bud --layers --tag ${CONTAINER} .
 
 systemctl disable                   \
     container-${CONTAINER}.service  \
@@ -44,3 +44,4 @@ systemctl start                     \
     pod-${POD}.service
 
 echo -e "${COLOR_GREEN}${CONTAINER}: done${COLOR_DEFAULT}"
+

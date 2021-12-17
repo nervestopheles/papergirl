@@ -65,7 +65,9 @@ class FreeGamesData
 
       'logo' => lambda do
         input['keyImages'].each do |key, _obj|
-          return key['url'] if key['type'] == 'OfferImageWide'
+          logo = key['url'] if key['type'] == 'OfferImageWide'
+          logo = key['url'] if logo.nil? && (key['type'] == 'DieselStoreFrontWide')
+          return logo
         end
       end.call,
 

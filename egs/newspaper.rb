@@ -36,6 +36,7 @@ class Newspaper
       name: 'Дата конца акции:', inline: true,
       value: date(DateTime.parse(news['promotions']['endDate']))
     )
+    var.url = nil if var.title == 'Mystery Game'
     return var
   end
 

@@ -64,11 +64,14 @@ class FreeGamesData
       'genre' => description[1],
 
       'logo' => lambda do
+        logo = nil
         input['keyImages'].each do |key, _obj|
-          logo = key['url'] if key['type'] == 'OfferImageWide'
-          logo = key['url'] if logo.nil? && (key['type'] == 'DieselStoreFrontWide')
-          return logo
+          return key['url'] if key['type'] == 'OfferImageWide'
+
+          logo = key['url'] if key['type'] == 'DieselStoreFrontWide'
+          logo = key['url'] if logo.nil? && (key['type'] == 'VaultClosed')
         end
+        return logo
       end.call,
 
       'price' => lambda do

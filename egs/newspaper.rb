@@ -5,10 +5,12 @@
 
 # ...
 class Newspaper
-  attr_reader :newspaper
+  attr_reader :newspaper,
+              :price
 
   def initialize(news)
     @newspaper = parse(news)
+    @price = news['price']['discountPrice'].to_i
   end
 
   private

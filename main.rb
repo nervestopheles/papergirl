@@ -104,6 +104,14 @@ newsgirl.command(
 end
 
 newsgirl.command(
+  :free,
+  description: 'Список бесплатных игр.'
+) do |event|
+  newspapers_bundle.bundle.each { |news| event.channel.send_embed('', news.newspaper) if news.price.zero? }
+  return nil
+end
+
+newsgirl.command(
   :subscribe,
   description: 'Подписаться на новости.'
 ) do |event|

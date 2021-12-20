@@ -28,6 +28,7 @@ class Timer
           next
         end
         current_fgd.set(new_fgd.data)
+        current_news_bundle = NewsPaperBundle.new(current_fgd)
         subs_list.each do |id|
           current_news_bundle.bundle.each do |news|
             newsgirl.send_message(id, '', false, news.newspaper)

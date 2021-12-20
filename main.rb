@@ -88,6 +88,7 @@ newsgirl.command(
   event.respond 'loading...'
   informations.update
   if informations.response.code == 200
+    newspapers_bundle = NewsPaperBundle.new(informations)
     event.respond 'ok!'
   else
     event.respond 'server response code is not 200.'

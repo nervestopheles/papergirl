@@ -1,7 +1,11 @@
-.vscode
+*.swp
 
-*.json
-*.csv
-*.txt
+data.json
+raw_output.json
+
+todo.txt
+log.txt
+
+subscribers_ids.csv
 
 .env

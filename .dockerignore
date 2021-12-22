@@ -1,0 +1,6 @@
+.vscode
+.git
+
+.rubocop.yml
+
+podman-start.sh

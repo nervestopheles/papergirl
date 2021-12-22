@@ -15,7 +15,7 @@ class Timer
   def initialize(current_fgd, current_news_bundle, subs_list, newsgirl)
     @thread = Thread.new do
       loop do
-        sleep(1 * 60 * 30) # 30 minut timer
+        sleep(1 * 60 * 5) # 5 minut timer
         # sleep(1 * 10)
         response = HTTP.get(current_fgd.response.uri)
         if response.content_length == current_fgd.response.content_length
@@ -31,7 +31,7 @@ class Timer
         current_news_bundle = NewsPaperBundle.new(current_fgd)
         subs_list.each do |id|
           current_news_bundle.bundle.each do |news|
-            newsgirl.send_message(id, '', false, news.newspaper)
+            newsgirl.send_message(id, '', false, news.newspaper) if news.price.zero?
           end
         end
         puts 'Get updates.'

@@ -1,9 +1,6 @@
 #!/bin/bash
 set -e
 
-COLOR_GREEN='\033[0;32m'
-COLOR_DEFAULT='\033[0m'
-
 # container and pod names
 CONTAINER=papergirl-core
 POD=${CONTAINER}-pod
@@ -56,5 +53,9 @@ systemctl enable                    \
 systemctl start                     \
     container-${CONTAINER}.service  \
     pod-${POD}.service
+
+# notification of end.
+COLOR_GREEN='\033[0;32m'
+COLOR_DEFAULT='\033[0m'
 
 echo -e "${COLOR_GREEN}${CONTAINER}: done${COLOR_DEFAULT}"

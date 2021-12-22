@@ -8,8 +8,6 @@ POD=${CONTAINER}-pod
 IMG=localhost/${CONTAINER}:latest
 VOLUME=papergirl-core-data
 
-PORT='8090'
-
 buildah bud --layers --tag ${CONTAINER} .
 
 systemctl disable                   \
@@ -26,7 +24,8 @@ podman volume create  \
 podman pod create     \
     --name ${POD}     \
     --hostname ${POD} \
-    -p ${PORT}:${PORT}
+    -p 8090:8090      \
+    -p 8091:80
 
 podman run                      \
     --pod ${POD}                \
@@ -35,7 +34,7 @@ podman run                      \
     --memory 1gb                \
     --cap-add=net_admin,net_raw \
     -v ${VOLUME}:/mnt:rw        \
-    -e PORT=${PORT}                                 \
+    -e PORT=8090                                    \
     -e BIND='0.0.0.0'                               \
     -e MODE='production'                            \
     -e RAW_OUTPUT='/mnt/raw_output.json'            \

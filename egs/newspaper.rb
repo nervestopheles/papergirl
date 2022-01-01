@@ -13,6 +13,11 @@ class Newspaper
     @price = news['price']['discountPrice'].to_i
   end
 
+  def update(news)
+    @newspaper = parse(news)
+    @price = news['price']['discountPrice'].to_i
+  end
+
   private
 
   def parse(news)

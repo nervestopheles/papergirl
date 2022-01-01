@@ -15,7 +15,7 @@ class Timer
   def initialize(current_fgd, current_news_bundle, subs_list, newsgirl)
     @thread = Thread.new do
       loop do
-        sleep(1 * 60 * 5) # 5 minut timer
+        sleep(60 * 15) # 15 minut timer
         # sleep(1 * 10)
         response = HTTP.get(current_fgd.response.uri)
         if response.content_length == current_fgd.response.content_length

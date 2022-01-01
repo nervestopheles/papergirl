@@ -16,7 +16,11 @@ class Timer
     @thread = Thread.new do
       loop do
         sleep(60 * 15) # 15 minut timer
-        response = HTTP.get(fgd.response.uri)
+        begin
+          response = HTTP.get(fgd.response.uri)
+        rescue
+          next
+        end
         if response.content_length == fgd.response.content_length
           puts 'No updates.'
           next

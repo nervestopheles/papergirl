@@ -12,25 +12,25 @@
 class Timer
   attr_reader :thread
 
-  def initialize(current_fgd, current_news_bundle, subs_list, newsgirl)
+  def initialize(fgd, nbund, slist, newsgirl)
     @thread = Thread.new do
       loop do
         sleep(60 * 15) # 15 minut timer
         # sleep(1 * 10)
-        response = HTTP.get(current_fgd.response.uri)
-        if response.content_length == current_fgd.response.content_length
+        response = HTTP.get(fgd.response.uri)
+        if response.content_length == fgd.response.content_length
           puts 'No updates.'
           next
         end
-        new_fgd = FreeGamesData.new(current_fgd.response.uri)
-        if new_fgd.data.to_s == current_fgd.data.to_s
+        new_fgd = FreeGamesData.new(fgd.response.uri)
+        if new_fgd.data.to_s == fgd.data.to_s
           puts 'Data miss.'
           next
         end
-        current_fgd.set(new_fgd.data)
-        current_news_bundle = NewsPaperBundle.new(current_fgd)
-        subs_list.each do |id|
-          current_news_bundle.bundle.each do |news|
+        fgd.set(new_fgd.data)
+        nbund = NewsPaperBundle.new(fgd)
+        slist.each do |id|
+          nbund.bundle.each do |news|
             newsgirl.send_message(id, '', false, news.newspaper) if news.price.zero?
           end
         end

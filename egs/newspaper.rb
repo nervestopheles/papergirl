@@ -9,8 +9,7 @@ class Newspaper
               :price
 
   def initialize(news)
-    @newspaper = parse(news)
-    @price = news['price']['discountPrice'].to_i
+    update(news)
   end
 
   def update(news)
@@ -61,10 +60,12 @@ class NewsPaperBundle
   attr_reader :bundle
 
   def initialize(informations)
+    update(informations)
+  end
+
+  def update(informations)
     @bundle = []
     informations.data.each do |info, _obj|
-      # next if info['price']['discountPrice'] != 0
-
       @bundle.append Newspaper.new(info)
     end
   end
